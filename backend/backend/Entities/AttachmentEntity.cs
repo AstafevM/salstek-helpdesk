@@ -1,21 +1,21 @@
 ﻿namespace backend.Entities
 {
     // Вложение
-    public class AttachmentEntity
+    public class AttachmentEntity(Guid id, string originalFileName, string serverFileName, string filePath, long fileSize, string contentType, Guid applicationId)
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = id;
 
-        public string ServerFileName { get; set; } = String.Empty;
-        
-        public string OriginalFileName { get; set; } = String.Empty;
-        
-        public string FilePath { get; set; } = String.Empty;
-        
-        public long FileSize { get; set; }
-        
-        public string ContentType { get; set; } = String.Empty; // Например, "image/png"
+        public string OriginalFileName { get; set; } = originalFileName;
 
-        public int ApplicationId { get; set; }
+        public string ServerFileName { get; set; } = serverFileName;
+
+        public string FilePath { get; set; } = filePath;
+
+        public long FileSize { get; set; } = fileSize;
+
+        public string ContentType { get; set; } = contentType;
+
+        public Guid ApplicationId { get; set; } = applicationId;
 
         public ApplicationEntity Application { get; set; } = null!;
     }

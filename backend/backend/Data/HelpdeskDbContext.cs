@@ -6,11 +6,11 @@ namespace backend.Data
 {
     public class HelpdeskDbContext(DbContextOptions options) : DbContext(options)
     {
-        public DbSet<UserEntity> Users { get; set; } = null!;
+        public DbSet<UserEntity> Users => Set<UserEntity>();
 
-        public DbSet<ApplicationEntity> Applications { get; set; } = null!;
+        public DbSet<ApplicationEntity> Applications => Set<ApplicationEntity>();
 
-        public DbSet<AttachmentEntity> Attachments { get; set; } = null!;
+        public DbSet<AttachmentEntity> Attachments => Set<AttachmentEntity>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

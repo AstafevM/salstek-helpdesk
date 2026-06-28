@@ -3,27 +3,27 @@
 namespace backend.Entities
 {
     // Заявка
-    public class ApplicationEntity
+    public class ApplicationEntity(Guid id, DateTime createdAt, string theme, string description, Guid clientId)
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; } = id;
 
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = createdAt;
 
-        public string Theme { get; set; } = String.Empty;
+        public string Theme { get; set; } = theme;
 
-        public string Description { get; set; } = String.Empty;
+        public string Description { get; set; } = description;
 
-        public int? ClientId { get; set; }
+        public Guid ClientId { get; set; } = clientId;
 
         public UserEntity Client { get; set; } = null!;
 
-        public Status ApplicationStatus { get; set; }
+        public Status ApplicationStatus { get; set; } = Status.New;
 
-        public Priority ApplicationPriority { get; set; }
+        public Priority ApplicationPriority { get; set; } = Priority.NotSet;
 
-        public int? ResponsibleId { get; set; }
+        public Guid? ResponsibleId { get; set; }
 
-        public UserEntity Responsible { get; set; } = null!;
+        public UserEntity? Responsible { get; set; }
 
         public ICollection<AttachmentEntity> Attachments { get; set; } = [];
     }

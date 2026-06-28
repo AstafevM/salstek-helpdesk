@@ -13,6 +13,10 @@ namespace backend.Configurations
             builder
                 .HasOne(att => att.Application)
                 .WithMany(app => app.Attachments);
+
+            //builder
+            //    .Property(att => att.ServerFileName)
+            //    .HasComputedColumnSql("[Id] + '_' + [OriginalFileName]");
         }
     }
 }

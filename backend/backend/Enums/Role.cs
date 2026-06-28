@@ -4,6 +4,6 @@
     {
         Initiator = 1,
         Executor = 2,
-        Administrator = 3
+        Admin = 3
     }
 }
