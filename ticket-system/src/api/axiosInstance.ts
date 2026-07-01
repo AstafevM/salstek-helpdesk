@@ -3,8 +3,9 @@ import { API_URL, AUTH_TOKEN_KEY } from '@/utils/env';
 
 // Создаём экземпляр axios с базовыми настройками
 export const axiosInstance = axios.create({
-  baseURL: API_URL,          // Базовый адрес из .env
-  timeout: 15000,            // Таймаут 15 секунд
+  baseURL: '/api',
+  timeout: 15000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
