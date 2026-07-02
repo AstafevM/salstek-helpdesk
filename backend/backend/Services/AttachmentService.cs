@@ -1,6 +1,7 @@
 ﻿using backend.Data;
 using backend.Entities;
 using backend.Records.Attachment;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services
 {
@@ -8,7 +9,7 @@ namespace backend.Services
     {
         private readonly HelpdeskDbContext _context = context;
 
-        public async Task<GetAttachmentResult> CreateAttachmentAsync(Guid applicationId, UploadAttachmentRequest request)
+        public async Task<GetAttachmentResult> UploadAttachmentAsync(Guid applicationId, UploadAttachmentRequest request)
         {
             if (request.File == null || request.File.Length == 0)
             {
@@ -46,7 +47,7 @@ namespace backend.Services
             return new GetAttachmentResult(newAttachment);
         }
 
-        public async Task<DownloadAttachmentResult> GetByIdAsync(int attId)
+        public async Task<DownloadAttachmentResult> DownloadAttachmentAsync(Guid attId)
         {
             var attachment =
                 await _context.Attachments.FindAsync(attId) ??
@@ -61,6 +62,25 @@ namespace backend.Services
                 attachment.OriginalFileName,
                 attachment.FilePath, 
                 attachment.ContentType);
+        }
+
+        public async Task DeleteAttachmentAsync(Guid id)
+        {
+            var attachment = 
+                await _context.Attachments.FindAsync(id) ?? 
+                throw new Exception($"Вложение {id} не найдено в БД.");
+
+            _context.Attachments.Remove(attachment);
+            await _context.SaveChangesAsync();
+
+            if (File.Exists(attachment.FilePath))
+            {
+                File.Delete(attachment.FilePath);
+            }
+            else
+            {
+                throw new Exception($"Файл по пути {attachment.FilePath} не найден.");
+            }
         }
     }
 }

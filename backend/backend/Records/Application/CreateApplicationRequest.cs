@@ -2,6 +2,5 @@
 {
     public record CreateApplicationRequest(
         string Theme, 
-        string Description,
-        Guid ClientId);
+        string Description);
 }

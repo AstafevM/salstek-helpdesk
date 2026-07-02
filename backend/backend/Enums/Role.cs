@@ -2,7 +2,7 @@
 {
     public enum Role
     {
-        Initiator = 1,
+        Client = 1,
         Executor = 2,
         Admin = 3
     }

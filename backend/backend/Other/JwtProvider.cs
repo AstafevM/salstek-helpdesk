@@ -15,7 +15,9 @@ namespace backend.Other
         {
             var claims = new List<Claim>
             {
-                new("user_id", user.Id.ToString()),
+                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                //new(ClaimTypes.Email, user.Email),
+                new(ClaimTypes.Role, user.Role.ToString())
             };
 
             var signingCredentials = new SigningCredentials(

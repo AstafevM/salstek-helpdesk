@@ -17,9 +17,8 @@ namespace backend.Services
 
         public async Task<GetUserResult> RegisterAsync(RegisterUserRequest request)
         {
-            var user =
-                await _context.Users.FirstOrDefaultAsync(u => u.Email == request.Email) ??
-                throw new Exception($"Ошибка регистрации: пользователь уже существует.");
+            if (await _context.Users.AnyAsync(u => u.Email == request.Email))
+                throw new Exception("Ошибка регистрации: пользователь уже существует.");
 
             var newUser = new UserEntity(
                 Guid.NewGuid(), 
@@ -52,7 +51,7 @@ namespace backend.Services
             return token;
         }
 
-        public async Task<GetUserResult>GetByIdAsync(int userId)
+        public async Task<GetUserResult>GetByIdAsync(Guid userId)
         {
             var user = 
                 await _context.Users.FindAsync(userId) ??
@@ -72,12 +71,14 @@ namespace backend.Services
             return users;
         }
 
-        public async Task DeleteAsync(int user_id)
+        public async Task DeleteAsync(Guid user_id)
         {
             var user = 
                 await _context.Users.FindAsync(user_id) ??
                 throw new Exception($"Пользователь {user_id} не найден в БД");
+
             user.IsDeleted = true;
+            await _context.SaveChangesAsync();
         }
     }
 }

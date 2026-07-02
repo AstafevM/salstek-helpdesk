@@ -1,4 +1,5 @@
 using backend.Data;
+using backend.Enums;
 using backend.Other;
 using backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +13,7 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 var connectionString = configuration.GetConnectionString("DefaultConnection");
+var environment = configuration.GetSection("environmentVariables")["ASPNETCORE_ENVIRONMENT"];
 
 services.AddEndpointsApiExplorer();
 services.AddSwaggerGen();
@@ -55,11 +57,57 @@ services
         };
     });
 
-services.AddAuthorization();
+var allRoles = new[]
+{
+    Role.Admin.ToString(),
+    Role.Executor.ToString(),
+    Role.Client.ToString()
+};
+
+services.AddAuthorizationBuilder()
+
+    .AddPolicy("Users.Read", policy =>
+        policy.RequireRole(Role.Admin.ToString()))
+
+    .AddPolicy("Users.ReadAll", policy =>
+        policy.RequireRole(Role.Admin.ToString()))
+
+    .AddPolicy("Users.Delete", policy =>
+        policy.RequireRole(Role.Admin.ToString()))
+
+
+    .AddPolicy("Applications.Create", policy =>
+        policy.RequireRole(allRoles))
+
+    .AddPolicy("Applications.Read", policy =>
+        policy.RequireRole(allRoles))
+
+    .AddPolicy("Applications.ReadAll", policy =>
+        policy.RequireRole(allRoles))
+
+    .AddPolicy("Applications.ChangeStatus", policy =>
+        policy.RequireRole(
+            Role.Admin.ToString(),
+            Role.Executor.ToString()))
+
+    .AddPolicy("Applications.Assign", policy =>
+        policy.RequireRole(
+            Role.Admin.ToString(),
+            Role.Executor.ToString()))
+
+
+    .AddPolicy("Attachments.Upload", policy =>
+        policy.RequireRole(allRoles))
+
+    .AddPolicy("Attachments.Download", policy =>
+        policy.RequireRole(allRoles))
+
+    .AddPolicy("Attachments.Delete", policy =>
+        policy.RequireRole(Role.Admin.ToString()));
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+if (environment == "Development") // для отключения поменять в appsettings.json на "Production"
 {
     app.UseSwagger();
     app.UseSwaggerUI();

@@ -7,7 +7,7 @@ namespace backend.Controllers
 {
     [Route("users")]
     [ApiController]
-    public class UsersController(UserService service) : ControllerBase
+    public class UserController(UserService service) : ControllerBase
     {
         private readonly UserService _service = service;
 
@@ -44,7 +44,8 @@ namespace backend.Controllers
         }
 
         [HttpGet("{user_id}")]
-        public async Task<IActionResult> GetById([FromRoute] int user_id)
+        [Authorize("Users.Read")]
+        public async Task<IActionResult> GetById([FromRoute] Guid user_id)
         {
             try
             {
@@ -58,6 +59,7 @@ namespace backend.Controllers
         }
 
         [HttpGet]
+        [Authorize("Users.ReadAll")]
         public async Task<IActionResult> GetAll()
         {
             var users = await _service.GetAllAsync();
@@ -65,7 +67,8 @@ namespace backend.Controllers
         }
 
         [HttpDelete("{user_id}")]
-        public async Task<IActionResult> Delete([FromRoute] int user_id)
+        [Authorize("Users.Delete")]
+        public async Task<IActionResult> Delete([FromRoute] Guid user_id)
         {
             try
             {
